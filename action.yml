@@ -1,0 +1,12 @@
+name: 'awesome-readme-generator'
+description: 'Generate Awesome Readme.md from your Github starred repos ;)'
+inputs:
+  github-token:
+    description: 'github token'
+    required: true
+  owner:
+    description: 'owner name'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

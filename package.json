@@ -1,0 +1,26 @@
+{
+  "name": "my-awesome-readme-generator",
+  "version": "1.0.0",
+  "description": "Generate Awesome Readme.md from your Github starred repos ;)",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js --license licenses.txt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skyfe79/my-awesome-readme-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skyfe79/my-awesome-readme-generator/issues"
+  },
+  "homepage": "https://github.com/skyfe79/my-awesome-readme-generator#readme",
+  "dependencies": {
+    "@actions/core": "^1.5.0",
+    "@actions/github": "^5.0.0",
+    "simple-octokit": "^1.0.0"
+  }
+}
