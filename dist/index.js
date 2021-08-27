@@ -7872,7 +7872,7 @@ const convert_group_to_h2_markdown = (group_key, group_value) => {
       }
     }
 
-    let markdown = [];
+    let markdown = ['<div align="center"><img width="500" height="350" src="https://raw.githubusercontent.com/skyfe79/awesome-readme-generator/main/media/logo.svg" alt="Awesome"><br><br><hr></div>\n\n'];
     const toc = convert_maps_to_toc_markdown(topicMap);
     markdown.push(toc);
 
@@ -7893,10 +7893,7 @@ const convert_group_to_h2_markdown = (group_key, group_value) => {
     }
 
     const result = markdown.join("\n\n");
-    fs.writeFileSync('README2.md', result);
-    const content = fs.readFileSync('README2.md', 'utf-8');
-    
-    console.log(content);
+    fs.writeFileSync('README.md', result);
 
   } catch (error) {
     core.setFailed(error.message);
