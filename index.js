@@ -96,7 +96,7 @@ const convert_group_to_h2_markdown = (group_key, group_value) => {
       }
     }
 
-    let markdown = ['<div align="center"><img width="500" height="350" src="media/logo.svg" alt="Awesome"><br><br><hr></div>\n\n'];
+    let markdown = ['<div align="center"><img width="500" height="350" src="https://raw.githubusercontent.com/skyfe79/awesome-readme-generator/main/media/logo.svg" alt="Awesome"><br><br><hr></div>\n\n'];
     const toc = convert_maps_to_toc_markdown(topicMap);
     markdown.push(toc);
 
