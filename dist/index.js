@@ -7792,15 +7792,47 @@ const fetch_repo_info_with_topics = async (octokit, repository) => {
     description,
     topics: topics.data.names
   };
-}
+};
 
-const fetch_starred_repos = async (octokit, username) => {
+const fetch_repo_info_with_language = (octokit, repository) => {
+  const html_url = repository.html_url;
+  const description = repository.description;
+  const repo = repository.name;
+  const language = repository.language;
+
+  return {
+    name: repo,
+    url: html_url,
+    description,
+    language
+  };
+};
+
+// take so many times...
+const fetch_starred_repos_with_topics = async (octokit, username) => {
   let result = [];
   for await (const response of octokit.activity.listReposStarredByUser.all({ username })) {
     for (const repo of response.data) {
       try {
         const repo_info = await fetch_repo_info_with_topics(octokit, repo);
         result.push(repo_info);
+        console.log(`[DONE] ${repo.name}`);
+      } catch (error) {
+        continue;
+      }
+    }
+  }
+  return result;
+};
+
+const fetch_starred_repos_with_language = async (octokit, username) => {
+  let result = [];
+  for await (const response of octokit.activity.listReposStarredByUser.all({ username })) {
+    for (const repo of response.data) {
+      try {
+        const repo_info = fetch_repo_info_with_language(octokit, repo);
+        result.push(repo_info);
+        console.log(`[DONE] ${repo.name}`);
       } catch (error) {
         continue;
       }
@@ -7854,20 +7886,36 @@ const convert_group_to_h2_markdown = (group_key, group_value) => {
   try {
     const owner = core.getInput('owner');
     const myToken = core.getInput('github-token');
+    const groupBy = core.getInput('group-by');
     const octokit = simpleOctokit(myToken);
-    const repos = await fetch_starred_repos(octokit, owner);
+
+    // const response = await octokit.rateLimit.get();
+    // console.log(JSON.stringify(response.data, null, 2));
 
     const topicMap = new Map();
 
-    for (const repo of repos) {
-      if (repo.topics.length == 0) {
-        upsert(topicMap, 'etc', repo);
-      } else {
-        for (const topic of repo.topics) {
-          upsert(topicMap, topic, repo);
+    if (groupBy === 'topic') {
+      const repos = await fetch_starred_repos_with_topics(octokit, owner);
+      for (const repo of repos) {
+        if (repo.topics.length == 0) {
+          upsert(topicMap, 'etc', repo);
+        } else {
+          for (const topic of repo.topics) {
+            upsert(topicMap, topic, repo);
+          }
+        }
+      }
+    } else {
+      const repos = await fetch_starred_repos_with_language(octokit, owner);
+      for (const repo of repos) {
+        if (repo.language) {
+          upsert(topicMap, repo.language, repo);
+        } else {
+          upsert(topicMap, 'etc', repo);
         }
       }
     }
+    
 
     let markdown = ['<div align="center"><img width="500" height="350" src="https://raw.githubusercontent.com/skyfe79/awesome-readme-generator/main/media/logo.svg" alt="Awesome"><br><br><hr></div>\n\n'];
     const toc = convert_maps_to_toc_markdown(topicMap);
@@ -7891,6 +7939,9 @@ const convert_group_to_h2_markdown = (group_key, group_value) => {
 
     const result = markdown.join("\n\n");
     fs.writeFileSync('README.md', result);
+
+    // const readme = fs.readFileSync('README.md', 'utf-8');
+    // console.log(readme);
 
   } catch (error) {
     core.setFailed(error.message);

@@ -13,6 +13,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           owner: 'skyfe79'
+          group-by: 'language'
 
       # - name: Commit files
       #   run: |

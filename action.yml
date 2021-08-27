@@ -7,6 +7,10 @@ inputs:
   owner:
     description: 'owner name'
     required: true
+  group-by:
+    description: 'Group repos by language or topics.'
+    default: 'language'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
