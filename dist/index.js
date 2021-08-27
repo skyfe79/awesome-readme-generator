@@ -7804,9 +7804,6 @@ const fetch_starred_repos = async (octokit, username) => {
       } catch (error) {
         continue;
       }
-      if (result.length > 3) {
-        return result;
-      }
     }
   }
   return result;
