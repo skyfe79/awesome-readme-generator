@@ -57,9 +57,6 @@ const fetch_starred_repos_with_language = async (octokit, username) => {
         const repo_info = fetch_repo_info_with_language(octokit, repo);
         result.push(repo_info);
         console.log(`[DONE] ${repo.name}`);
-        if (result.length > 3) {
-          return result;
-        }
       } catch (error) {
         continue;
       }
@@ -92,7 +89,7 @@ const sorted_map_keys = (map) => {
 
 const convert_maps_to_toc_markdown = (map) => {
   let sorted_keys = sorted_map_keys(map);
-  let toc = ['## Contents(#toc)\n'];
+  let toc = ['## [Contents](#toc)\n'];
   for (const key of sorted_keys) {
     const group_name = `${key}`.replace(/ /g, '-');
     const group = `- [${key}](#${group_name})`;
@@ -103,7 +100,7 @@ const convert_maps_to_toc_markdown = (map) => {
 
 const convert_group_to_h2_markdown = (group_key, group_value) => {
   const group_name = `${group_key}`.replace(/ /g, '-');
-  let toc = [`## ${group_name}(#toc)\n`];
+  let toc = [`## [${group_name}](#toc)\n`];
   for (const repo of group_value) {
     const group = `- [${repo.name}](${repo.url}) - ${repo.description}`;
     toc.push(group);
