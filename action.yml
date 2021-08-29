@@ -1,5 +1,8 @@
 name: 'awesome-readme-generator'
 description: 'Generate Awesome Readme.md from your Github starred repos ;)'
+branding:
+  icon: 'bookmark'
+  color: 'yellow'
 inputs:
   github-token:
     description: 'github token'
